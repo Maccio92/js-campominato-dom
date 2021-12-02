@@ -20,6 +20,7 @@ button.addEventListener ('click', function () {
                 active.classList.add("show");
                 row = 10;
                 col = 10;
+                range = 101;
             createSquare(row, col);
             break;
             case 'medium':
@@ -27,6 +28,7 @@ button.addEventListener ('click', function () {
                 active.classList.add("show");
                 row = 9;
                 col = 9;
+                range = 82;
                 createSquare(row, col);
                 break;
             case 'hard':
@@ -34,13 +36,22 @@ button.addEventListener ('click', function () {
                 active.classList.add("show");
                 row = 7;
                 col = 7;
+                range = 50;
                 createSquare(row, col);
                 break;
     }
-    // Funzione per creare le griglie
+    // Funzione per griglie, generazione array e clic
     function createSquare(row, col) {
         let container = document.querySelector(".field");
         let numberSquare = row * col;
+        // Creo un array per generare le "bombe"
+        let bombNumber = [];
+        while (bombNumber.length < 16) {
+            let number = Math.floor(Math.random() * range);
+            if (bombNumber.indexOf(number) === -1) bombNumber.push(number);
+        }
+        console.log(bombNumber);
+            // Creo la griglia
         for (let i = 0; i < numberSquare; i++) {
             let square = document.createElement('div');
             square.classList.add('square');
@@ -52,21 +63,19 @@ button.addEventListener ('click', function () {
 
             // Aggiungere BG al clic
             square.addEventListener ('click', function () {
-                
                 if (bombNumber.includes(i + 1)){
-                    this.classList.add ('bg-bomb');
-                } else{
+                    for (let index = 0; index < range; index++) {
+                        let allBomb = document.querySelectorAll ('.square');
+                        if (bombNumber.includes(index + 1)) {
+                            allBomb[index].classList.add ('bg-bomb');
+                        }
+                   } 
+                   let message = document.createElement ('div');
+                   message.innerHTML = `Hai Perso. Ritenta`; 
+                   message.classList.add('text');  
+                   container.append (message);              
+                } else {
                     this.classList.add ('bg-active');
                 }
     })}}
 })
-
-// Creo Array per le bombe
-let bombNumber = [];
-for (let i = 0; i < 16; i++) {
-    let number = parseInt(Math.floor(Math.random() * 101));
-    while (!bombNumber.includes(number)){
-         bombNumber.push(number);
-    }
-}
-console.log(bombNumber);
